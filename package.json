@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "serve": "node ./server.js",
-    "server": "nodemon ./server.js",
+    "serve": "node ./api",
+    "server": "nodemon ./api",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

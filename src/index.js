@@ -6,6 +6,7 @@ const appDiv = document.getElementById('app');
 appDiv.innerHTML = `
 <h1>TikTakToe</h1>
 <button id="reset">Reset</button>
+<p>name: <span id="playername"></span</p>
 <div class="wrapper">
   <div class="box" id="a1"></div>
   <div class="box" id="a2"></div>
@@ -17,15 +18,20 @@ appDiv.innerHTML = `
   <div class="box" id="c2"></div>
   <div class="box" id="c3"></div>
 </div>
+<div id="output"></div>
 `;
 let ready = false;
+let gamestate = {}
 let playerName = prompt('Enter your name:');
+document.querySelector('#playername').innerHTML = playerName;
 let winner = false;
-let player = 1;
+let player = 0;
 let score = [[], []];
 let players = [{id:'X'}, {id: 'O'}];
+
 const clientUpdate = client(playerName, onUpdate);
-clientUpdate({score, player, players});
+clientUpdate();
+
 document.querySelector('#reset').onclick = () => {
   score = [[], []];
   resetGame();
@@ -39,10 +45,10 @@ document.querySelector('#reset').onclick = () => {
 });
 
 function clickBox(id) {
-  if (players[player - 1].name != playerName) return;
-  player = player == 2 ? 1 : 2;
-  score[player - 1].push(id);
+  if (players[player].name != playerName) return;
+  score[player].push(id);
   updateGame();
+  player = player == 1 ? 0 : 1;
   clientUpdate({score, player, players});
 }
 
@@ -63,6 +69,9 @@ function updateGame() {
     })
   })
   isWinnner(player);
+  document.querySelector('#output').innerHTML = `
+  player: ${JSON.stringify(gamestate)}
+  `
 }
 
 function isWinnner(player) {
@@ -70,7 +79,7 @@ function isWinnner(player) {
   winner = isWin(player);
   if (winner) {
     setTimeout(() => {
-      alert(`${players[player - 1].name} Wins!`);
+      alert(`${players[player].name} Wins!`);
       winner = false;
       score = [[], []];
       resetGame();
@@ -80,15 +89,19 @@ function isWinnner(player) {
 }
 
 function onUpdate(game) {
-  score = game.score;
-  player = game.player;
-  players = game.players;
+  gamestate = game;
+  
+  score = game.hasOwnProperty('score') ? game.score : score;
+  player = game.hasOwnProperty('player') ? game.player : player;
+  players = game.hasOwnProperty('players') ? game.players : players;
+
   players.find((p, i) => {
     if (p.name == playerName) {
       return true;
     }
     if (!p.name) {
       p.name = playerName;
+      clientUpdate({score, player, players});
       return true;
     }
   })
@@ -104,12 +117,12 @@ function isWin(player) {
   let winner = false;
   for (let g of grid) {
     for (let c of g) {
-      if (score[player - 1].filter((f) => f.includes(c)).length == 3) {
+      if (score[player].filter((f) => f.includes(c)).length == 3) {
         return (winner = true);
       }
     }
   }
-  const has = (x) => score[player - 1].includes(x);
+  const has = (x) => score[player].includes(x);
   if (has('a1') && has('b2') && has('c3')) {
     return (winner = true);
   }
