@@ -9,6 +9,8 @@ import express from 'express';
 import http from 'http';
 import {Server} from'socket.io';
 
+const port = process.env.PORT || 3000;
+
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
@@ -64,6 +66,6 @@ io.on('connection', function (socket) {
   });
 });
 
-httpServer.listen(3000, function () {
-  console.log('listening on *:3000');
+httpServer.listen(port, function () {
+  console.log(`listening on *:${port}`);
 });
