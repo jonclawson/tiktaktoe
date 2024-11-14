@@ -1,1 +1,10 @@
 dist
+
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+.terraformrc
+terraform.rc
+.terraform.lock.hcl

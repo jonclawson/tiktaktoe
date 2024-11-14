@@ -23,6 +23,7 @@ appDiv.innerHTML = `
 let ready = false;
 let gamestate = {}
 let playerName = prompt('Enter your name:');
+
 document.querySelector('#playername').innerHTML = playerName;
 let winner = false;
 let player = 0;
