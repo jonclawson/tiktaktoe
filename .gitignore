@@ -7,4 +7,3 @@ dist
 crash.log
 .terraformrc
 terraform.rc
-.terraform.lock.hcl
