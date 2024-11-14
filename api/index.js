@@ -18,7 +18,7 @@ const io = new Server(httpServer, {
     }
   });
 
-app.use(express.static('../dist/'));
+app.use(express.static('./dist/'));
 
 var connections = {};
 const games = {};
